@@ -22,5 +22,11 @@ class LoginPage(BasePage):
         login.send_keys(email)
         passw = self.browser.find_element(*LoginPageLocators.PASSWORD)
         passw.send_keys(password)
-        button = self.browser.find_element(*LoginPageLocators.LOG_IN_BUTTON)
+        passw2 = self.browser.find_element(*LoginPageLocators.PASSWORD_CONFIRM)
+        passw2.send_keys(password)
+        button = self.browser.find_element(*LoginPageLocators.REG_BUTTON)
         button.click()
+
+    # def go_to_product_page(self):
+    #     link = self.browser.find_element(*LoginPageLocators.PRODUCT)
+    #     link.click()

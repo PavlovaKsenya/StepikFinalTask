@@ -66,25 +66,24 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_be_empty_basket()
 
-@pytest.mark.login_guest
 class TestUserAddToBasketFromProductPage():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
-        self.login_page = LoginPage(browser, "http://selenium1py.pythonanywhere.com/en-gb/accounts/login/")
-        self.login_page.open()
+        self.link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
+        self.page = ProductPage(browser, self.link)
+        self.page.open()
+        self.page.go_to_login_page()
+        self.login_page = LoginPage(browser, browser.current_url)
         self.login_page.register_new_user(str(time.time()) + "@fakemail.org", str(time.time()))
 
-    def test_user_cant_see_success_message(browser):
-        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
-        page = ProductPage(browser, link)
+    def test_user_cant_see_success_message(self, browser):
+        page = ProductPage(browser, self.link)
         page.open()
         page.should_not_be_success_message()
 
-    def test_user_can_add_product_to_basket(browser):
-        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
-        page = ProductPage(browser, link)
+    def test_user_can_add_product_to_basket(self, browser):
+        page = ProductPage(browser, self.link)
         page.open()
         page.add_to_busket()
-        page.solve_quiz_and_get_code()
         page.valid_names()
         page.valid_price()

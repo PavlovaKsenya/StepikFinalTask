@@ -6,9 +6,11 @@ class MainPageLocators():
 class LoginPageLocators():
     REGISTER_FORM = (By.ID, "register_form")
     LOGIN_FORM = (By.ID, "login_form")
-    EMAIL = (By.ID, "id_login-username")
-    PASSWORD = (By.ID, "id_login-password")
-    LOG_IN_BUTTON = (By.NAME, "login_submit")
+    EMAIL = (By.NAME, "registration-email")
+    PASSWORD = (By.NAME, "registration-password1")
+    PASSWORD_CONFIRM = (By.NAME, "registration-password2")
+    REG_BUTTON = (By.NAME, "registration_submit")
+    # PRODUCT = (By.CSS_SELECTOR, ".product_pod a")
 
 class ProductPageLocators():
     ADD_TO_BASKET = (By.CLASS_NAME, "btn-add-to-basket")
