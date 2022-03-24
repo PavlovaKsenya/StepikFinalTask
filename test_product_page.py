@@ -1,9 +1,9 @@
 import time
 
 import pytest
-
-from pages.busket_page import BasketPage
-from pages.product_page import ProductPage
+from .pages.basket_page import BasketPage
+from .pages.login_page import LoginPage
+from .pages.product_page import ProductPage
 
 
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
@@ -65,3 +65,26 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     page.go_to_basket()
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_be_empty_basket()
+
+@pytest.mark.login_guest
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        self.login_page = LoginPage(browser, "http://selenium1py.pythonanywhere.com/en-gb/accounts/login/")
+        self.login_page.open()
+        self.login_page.register_new_user(str(time.time()) + "@fakemail.org", str(time.time()))
+
+    def test_user_cant_see_success_message(browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_to_busket()
+        page.solve_quiz_and_get_code()
+        page.valid_names()
+        page.valid_price()
