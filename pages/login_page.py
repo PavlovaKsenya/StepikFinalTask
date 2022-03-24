@@ -26,7 +26,3 @@ class LoginPage(BasePage):
         passw2.send_keys(password)
         button = self.browser.find_element(*LoginPageLocators.REG_BUTTON)
         button.click()
-
-    # def go_to_product_page(self):
-    #     link = self.browser.find_element(*LoginPageLocators.PRODUCT)
-    #     link.click()
