@@ -1,5 +1,8 @@
 from selenium.webdriver.common.by import By
 
+class MainPageLocators():
+    pass
+
 class LoginPageLocators():
     REGISTER_FORM = (By.ID, "register_form")
     LOGIN_FORM = (By.ID, "login_form")
@@ -13,5 +16,8 @@ class ProductPageLocators():
     SUCCESS_MESSAGE = (By.CSS_SELECTOR, "#messages .alertinner")
 
 class BasePageLocators():
+    BASKET = (By.CSS_SELECTOR, ".basket-mini a.btn.btn-default")
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
-    # LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+
+class BasketPageLocators():
+    BASKET_TEXT = (By.CSS_SELECTOR, "#content_inner p")
