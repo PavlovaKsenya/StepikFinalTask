@@ -1,7 +1,5 @@
 from selenium.webdriver.common.by import By
 
-class MainPageLocators():
-    pass
 
 class LoginPageLocators():
     REGISTER_FORM = (By.ID, "register_form")
@@ -26,3 +24,4 @@ class BasePageLocators():
 
 class BasketPageLocators():
     BASKET_TEXT = (By.CSS_SELECTOR, "#content_inner p")
+    BASKET_INNER = (By.CLASS_NAME, "basket-items")
