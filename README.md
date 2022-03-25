@@ -1,2 +1,4 @@
 # StepikFinalTask
-project with Page Object model
+Project with Page Object model
+
+https://stepik.org/course/575
