@@ -1,6 +1,8 @@
+import allure
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from seleniumwrapper import SeleniumWrapper
 
 
 def pytest_addoption(parser):
@@ -17,3 +19,21 @@ def browser(request):
     yield browser
     print("\nquit browser..")
     browser.quit()
+
+@pytest.mark.tryfirst
+def pytest_runtest_makereport(item, call, __multicall__):
+    rep = __multicall__.execute()
+    setattr(item, "rep_" + rep.when, rep)
+    return rep
+
+@pytest.fixture(scope="function")
+def screenshot_on_failure(request):
+    def fin():
+        driver = SeleniumWrapper().driver
+        attach = driver.get_screenshot_as_png()
+        if request.node.rep_setup.failed:
+            allure.attach(request.function.__name__, attach, allure.attach_type.PNG)
+        elif request.node.rep_setup.passed:
+            if request.node.rep_call.failed:
+                allure.attach(request.function.__name__, attach, allure.attach_type.PNG)
+    request.addfinalizer(fin)
