@@ -9,7 +9,7 @@ https://stepik.org/course/575
 
 Выполнить:
 
-pytest tests -v --assert='plain' --alluredir report 
+pytest tests --alluredir report 
 
 allure serve report
 
