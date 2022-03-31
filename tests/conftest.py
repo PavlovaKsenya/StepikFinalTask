@@ -10,7 +10,6 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="function")
 def browser(request):
-    print("\nstart browser for test..")
     user_language = request.config.getoption("language")
     options = Options()
     options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
@@ -23,7 +22,6 @@ def browser(request):
     elif request.node.rep_setup.passed:
         if request.node.rep_call.failed:
             allure.attach(attach, request.function.__name__, allure.attachment_type.PNG)
-    print("\nquit browser..")
     browser.quit()
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
