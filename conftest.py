@@ -2,7 +2,6 @@ import allure
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from seleniumwrapper import SeleniumWrapper
 
 
 def pytest_addoption(parser):
@@ -16,24 +15,22 @@ def browser(request):
     options = Options()
     options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
     browser = webdriver.Chrome(options=options)
+
     yield browser
+    attach = browser.get_screenshot_as_png()
+    if request.node.rep_setup.failed:
+        allure.attach(attach, request.function.__name__, allure.attachment_type.PNG)
+    elif request.node.rep_setup.passed:
+        if request.node.rep_call.failed:
+            allure.attach(attach, request.function.__name__, allure.attachment_type.PNG)
     print("\nquit browser..")
     browser.quit()
 
-@pytest.mark.tryfirst
-def pytest_runtest_makereport(item, call, __multicall__):
-    rep = __multicall__.execute()
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    # выполняем все остальные хуки до получения report object
+    outcome = yield
+    rep = outcome.get_result()
+    # устанавливаем атрубут отчета на каждом этапе вызова:
+    # "setup", "call", "teardown"
     setattr(item, "rep_" + rep.when, rep)
-    return rep
-
-@pytest.fixture(scope="function")
-def screenshot_on_failure(request):
-    def fin():
-        driver = SeleniumWrapper().driver
-        attach = driver.get_screenshot_as_png()
-        if request.node.rep_setup.failed:
-            allure.attach(request.function.__name__, attach, allure.attach_type.PNG)
-        elif request.node.rep_setup.passed:
-            if request.node.rep_call.failed:
-                allure.attach(request.function.__name__, attach, allure.attach_type.PNG)
-    request.addfinalizer(fin)
