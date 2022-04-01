@@ -1,9 +1,9 @@
 import time
 import allure
 import pytest
-from ..pages.basket_page import BasketPage
-from ..pages.login_page import LoginPage
-from ..pages.product_page import ProductPage
+from pages.basket_page import BasketPage
+from pages.login_page import LoginPage
+from pages.product_page import ProductPage
 
 @pytest.mark.need_review
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
@@ -70,8 +70,8 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page.should_be_empty_basket()
 
 class TestUserAddToBasketFromProductPage():
-    @pytest.fixture(scope="function", autouse=True)
     @allure.step("Register new user")
+    @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
         self.link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
         self.page = ProductPage(browser, self.link)
