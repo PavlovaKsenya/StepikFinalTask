@@ -6,11 +6,11 @@ Project with Page Object model
 ### Запуск тестов и генерация отчёта
 1. Установить pytest, selenium, allure-pytest, pytest-xdist:
 ```
-pip install pytest selenium allure-pytest pytest-xdist
+pip install -r requirements.txt
 ```
 2. Выполнить:
 ```
-pytest tests -n auto --dist loadscope --alluredir report 
+pytest tests -n auto --alluredir report 
 ```
 ```
 allure serve report
