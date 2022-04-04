@@ -14,7 +14,7 @@ def pytest_addoption(parser):
                      help='headless options: "true" or "false"')
 
 @pytest.fixture(scope="function")
-def browser(request, ):
+def browser(request):
     browser_name = request.config.getoption("browser_name")
     user_language = request.config.getoption("language")
     headless = request.config.getoption('--headless')
