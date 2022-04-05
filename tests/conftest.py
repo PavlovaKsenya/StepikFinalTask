@@ -2,6 +2,7 @@ import allure
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 
 
 def pytest_addoption(parser):
@@ -25,11 +26,12 @@ def browser(request):
             options.add_argument("--headless")
         browser = webdriver.Chrome(options=options)
     elif browser_name == "firefox":
-        fp = webdriver.FirefoxProfile()
-        fp.set_preference("intl.accept_languages", user_language)
+        options = Options()
+        options.set_preference("intl.accept_languages", user_language)
+        # options = webdriver.FirefoxOptions()
         if headless == 'true':
-            fp.add_argument("--headless")
-        browser = webdriver.Firefox(firefox_profile=fp)
+            options.add_argument("--headless")
+        browser = webdriver.Firefox(options=options)
     else:
         print("Browser {} still is not implemented".format(browser_name))
     yield browser
