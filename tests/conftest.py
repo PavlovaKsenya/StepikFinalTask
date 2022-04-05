@@ -2,19 +2,38 @@ import allure
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 
 
 def pytest_addoption(parser):
+    parser.addoption('--browser_name', action='store', default='chrome',
+                     help="Choose browser: chrome or firefox")
     parser.addoption('--language', action='store', default='en',
                      help="Choose lang: ru/en/es...")
+    parser.addoption('--headless',
+                     default='true',
+                     help='headless options: "true" or "false"')
 
 @pytest.fixture(scope="function")
 def browser(request):
+    browser_name = request.config.getoption("browser_name")
     user_language = request.config.getoption("language")
-    options = Options()
-    options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
-    browser = webdriver.Chrome(options=options)
-
+    headless = request.config.getoption('--headless')
+    if browser_name == "chrome":
+        options = Options()
+        options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
+        if headless == 'true':
+            options.add_argument("--headless")
+        browser = webdriver.Chrome(options=options)
+    elif browser_name == "firefox":
+        options = Options()
+        options.set_preference("intl.accept_languages", user_language)
+        # options = webdriver.FirefoxOptions()
+        if headless == 'true':
+            options.add_argument("--headless")
+        browser = webdriver.Firefox(options=options)
+    else:
+        print("Browser {} still is not implemented".format(browser_name))
     yield browser
     attach = browser.get_screenshot_as_png()
     if request.node.rep_setup.failed:
